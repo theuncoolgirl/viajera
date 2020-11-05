@@ -1,8 +1,6 @@
 # Django-React App Setup
-## Structure and Setup
+## Backend Setup
 We are building two separate apps that will ultimately be connected - the React frontend client and the Django API backend. In the backend, we'll create a RESTful API using Django (with methods like GET, POST, etc). In the frontend, we'll hit this API using React. 
-
-
 
 ### Create Project Directory and Install Django
 This walkthrough assumes you already have `Python3`, `pip`, and `virtualenv` installed on your machine. 
@@ -70,7 +68,7 @@ According to the official Django documentation, a Django project is "a collectio
 ### Create a `.env` to Save Environmental Variables
 1. Install `python-dotenv` into your virtual environment:
     ```
-    pip install python-dotenv
+    pipenv install python-dotenv
     ```
 1. Create an `.env` in in the same folder as your `settings.py` file and save your environment variables to it:
     ```python
@@ -87,21 +85,6 @@ According to the official Django documentation, a Django project is "a collectio
     import os
     SECRET_KEY = os.getenv("SECRET_KEY")
     ```
-1. In your `wsgi.py` file in your project/backend folder, set your environment variables before the code that loads your website:
-    ```python
-    import os #add this
-
-    from dotenv import load_dotenv #add this
-    from django.core.wsgi import get_wsgi_application
-
-    project_folder = os.path.expanduser('~/my-project-directory') #add this
-    load_dotenv(os.path.join(project_folder, '.env')) #add this
-
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'server.settings')
-
-    application = get_wsgi_application()
-    ```
-1. 
 
 ### Create a Django App
 1. `cd` into the project folder and run the following to create your app:
@@ -133,9 +116,73 @@ According to the official Django documentation, a Django project is "a collectio
     ]
     ```
 
+## Database Setup
+### Install `pg_config` and `psycopg2-binary`
+1. Check whether or not `pg_config` is already installed on your OS (this is a requirement for using `psycopg2-binary`):
+    ```
+    pg_config
+    ```
+1. If it is not already installed, install it:
+    ```
+    export PATH=/usr/pgsql-12/bin/:${PATH}
+    ```
+    ```
+    which pg_config
+    ```
+1. Install `psycopg2-binary` in your virtual environment, which is a database binding for PostgreSQL:
+    ```
+    pipenv install psycopg2-binary
+    ```
+
+### Update `settings.py`
+1. Create your user and database in `psql` and update your `.env` accordingly with values for the user, password, and database name. 
+1. Update the `DATABASE` key in `settings.py` to the following so that it knows you plan to use PostgreSQL and that your database info has been stored in your `.env`:
+    ```python
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv("DATABASE_NAME"),
+            'USER': os.getenv("DATABASE_USER"),
+            'PASSWORD': os.getenv("DATABASE_PASSWORD"),
+            'HOST': os.getenv("DATABASE_HOST"),
+            'PORT': os.getenv("DATABASE_PORT"),
+        }
+    }
+    ```
+### Create A Custom User Model
+1. Create a custom user model. Django has a built-in `User` model already established, but you should *always* create a new custom user model when starting your project, because this will allow you to update/customize the model in the future. 
+    ```python
+    from django.contrib.auth.models import AbstractUser
+
+    class User(AbstractUser):
+        pass
+    ```
+1. Register the new custom user in `admin.py`:
+    ```python
+    from django.contrib import admin
+    from django.contrib.auth.admin import UserAdmin
+    from .models import User
+
+    admin.site.register(User, UserAdmin)
+    ```
+1. Configure your new `User` custom model as `AUTH_USER_MODEL` in `settings.py`:
+    ```python
+    # Custom user model
+    AUTH_USER_MODEL = "viajara.User"
+    ```
+### Create Your Models
+1. Create a model for each of your tables in `models.py`. Note that Django has some pre-built models such as the `User` model which you do not have to create yourself. Example:
+    ```python
+    class Place(models.Model):
+        created_by = models.ForeignKey(User, on_delete=models.SET_NULL)
+        latitude = models.DecimalField(max_digits=6, decimal_places=3)
+        longitude = models.DecimalField(max_digits=6, decimal_places=3)
+        created_at = model.DateTimeField(auto_now=False, auto_now_add=True)
+        updated_at = model.DateTimeField(auto_now=True, auto_now_add=False)
+    ```
 
 
-Front-End
+## Frontend Setup
 https://www.saaspegasus.com/guides/modern-javascript-for-django-developers/client-server-architectures/
 
 1. In that project directory, make a `/client` directory for the front end

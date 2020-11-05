@@ -73,6 +73,8 @@ Most data for the setlist.fm clone will be pulled from the setlist.fm API, but a
 
 1. Users
     - username
+    - first_name
+    - last_name
     - email
     - password hash
 1. Places
