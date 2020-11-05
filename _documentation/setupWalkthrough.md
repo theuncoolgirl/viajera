@@ -170,7 +170,7 @@ According to the official Django documentation, a Django project is "a collectio
     # Custom user model
     AUTH_USER_MODEL = "viajara.User"
     ```
-### Create Your Models
+### Create Your Models and Migrate
 1. Create a model for each of your tables in `models.py`. Note that Django has some pre-built models such as the `User` model which you do not have to create yourself. Example:
     ```python
     class Place(models.Model):
@@ -180,8 +180,52 @@ According to the official Django documentation, a Django project is "a collectio
         created_at = model.DateTimeField(auto_now=False, auto_now_add=True)
         updated_at = model.DateTimeField(auto_now=True, auto_now_add=False)
     ```
+1. Create your migrations in your virtual environment by running the following. `makemigrations` tells Django that you've updated something in your models, so you'll need to run this everytime you make an update before re-migrating. 
+    ```
+    python projectDirectory/manage.py makemigrations appName
+    ```
+1. Run your migrations in your virtual environment by running:
+    ```
+    python projectDirectory/manage.py migrate
+    ```
+1. Go ahead and set up a demo/super user while you are at it. Run this and follow the prompts to create your superuser:
+    ```
+    python projectDirectory/manage.py createsuperuser
+    ```
+1. If you want to make updates to your models in the future, do the following:
+    - change you models in `models.py`
+    - run `python manage.py makemigrations`
+    - run `python manage.py migrate`
 
-
+## Auth Setup
+### Set up DRF and Auth
+Only authenticated viewers will be able to access views, and they will authenticate using JWTAuthentication from the `simplejwt` package we previously installed. 
+1. Confiure DRF + DRF Simple JWT by adding the following to `settings.py`:
+    ```python
+    # add rest_framework to INSTALLED_APPS
+    INSTALLED_APPS = [ ... 'rest_framework'  ] 
+    
+    # add configs for REST_FRAMEWORK and SIMPLE_JWT
+    REST_FRAMEWORK = { 
+    'DEFAULT_PERMISSION_CLASSES': ( 'rest_framework.permissions.IsAuthenticated', ),
+    'DEFAULT_AUTHENTICATION_CLASSES': ( 'rest_framework_simplejwt.authentication.JWTAuthentication', ), 
+    } 
+    SIMPLE_JWT = { 
+        'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5), 
+        'REFRESH_TOKEN_LIFETIME': timedelta(days=14), 
+        'ROTATE_REFRESH_TOKENS': True, 
+        'BLACKLIST_AFTER_ROTATION': False, 
+        'ALGORITHM': 'HS256', 
+        'SIGNING_KEY': SECRET_KEY, 
+        'VERIFYING_KEY': None, 
+        'AUTH_HEADER_TYPES': ('JWT',), 
+        'USER_ID_FIELD': 'id', 
+        'USER_ID_CLAIM': 'user_id', 
+        'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',), 
+        'TOKEN_TYPE_CLAIM': 'token_type', 
+    }
+    ```
+    - Refresh tokens last 14 days are are used to get Access tokens, which last 5 minutes. A view can only be accessed by a user with a valid Access token, otherwise the user will receive a 401 'unauthorized' error. 
 ## Frontend Setup
 https://www.saaspegasus.com/guides/modern-javascript-for-django-developers/client-server-architectures/
 
