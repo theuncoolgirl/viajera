@@ -326,7 +326,55 @@ Only authenticated viewers will be able to access views, and they will authentic
             
             return instance
         ```
+1. Update the corresponding view in `views.py`:
+    ```python
+    from django.shortcuts import render
+    from rest_framework_simplejwt.views import TokenObtainPairView
+    from rest_framework import status, permissions
+    from rest_framework.response import Response
+    from rest_framework.views import APIView
+    from .serializers import MyTokenObtainPairSerializer, UserSerializer
 
+
+    class ObtainTokenPair(TokenObtainPairView):
+        serializer_class = MyTokenObtainPairSerializer
+
+    class UserCreate(APIView): 
+        permission_classes = (permissions.AllowAny,)
+
+        def post(self, request, format='json'):
+            serializer = UserSerializer(data=request.data)
+
+            if serializer.is_valid():
+                user = serializer.save()
+
+                if user:
+                    json = serializer.data
+
+                    return Response(json, status=status.HTTP_201_CREATED)
+
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    ```
+    Some notes:
+        -  `REST_FRAMERWORK`'s permissions defaults in `settings.py` are for views to be accessible only to authenticated users, so the permission must be set manually to `AllowAny` so that an unauthenticated user can actually sign up.
+        - this view just has a POST endpoint to create a new user
+        - the `UserSerializer` has a `create()` method, so `serializer.save()` can be used to create a User object. Could be used with `update()` methods as well. 
+1. Add relevant path to `urls.py` to create a new user:
+    ```python
+    from .views import ObtainTokenPair, UserCreate  # add UserCreate class to import
+
+    # urlpatterns = [ ...
+    path('user/create/', UserCreate.as_view(), name="create_user"),
+    # ... ]
+    ```
+1. Use CURL to test to make sure everything works!
+    ```
+    curl --header "Content-Type: application/json" -X POST http://127.0.0.1:8000/api/user/create/ --data '{"email":"ichiro@mariners.com","username":"ichiro1","password":"konnichiwa","first_name":"first","last_name":"last"}'
+    ```
+1. You should receive a response similar to:
+    ```
+    {"email":"ichiro@mariners.com","username":"ichiro1","first_name":"first","last_name":"last"}
+    ```
 
 ### Create Other Serializers
 1. Add a serializers for every model in your `serializers.py` file:

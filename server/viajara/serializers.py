@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from .models import User, Place, List, ListEntry, Photo
-
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 
@@ -56,7 +55,7 @@ class ListEntrySerializer(serializers.ModelSerializer):
                   'notes', 'created_at', 'updated_at')
 
 
-class Photo(serializers.ModelSerializer):
+class PhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Photo
         fields = ('id', 'place_id', 'list_entry_id',

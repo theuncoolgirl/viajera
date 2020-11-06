@@ -1,6 +1,4 @@
 from django.shortcuts import render
-
-# Create your views here.
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import status, permissions
 from rest_framework.response import Response
@@ -11,18 +9,26 @@ from .serializers import MyTokenObtainPairSerializer, UserSerializer
 class ObtainTokenPair(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
-    class CustomUserCreate(APIView):
-        permission_classes = (permissions.AllowAny,)
 
-        def post(self, request, format='json'):
-            serializer = UserSerializer(data=request.data)
+class UserCreate(APIView):
+    # REST_FRAMERWORK's permissions defaults are for views to be accessible
+    # only to authenticated users, so the permission must be set manually to
+    # `AllowAny` so that an unauthenticated user can actually sign up.
+    permission_classes = (permissions.AllowAny,)
 
-            if serializer.is_valid():
-                user = serializer.save()
+    # this view just has a POST endpoint to create a new user
+    def post(self, request, format='json'):
+        serializer = UserSerializer(data=request.data)
 
-                if user:
-                    json = serializer.data
+        if serializer.is_valid():
+            # the UserSerializer has a `create()` method, so
+            # `serializer.save()` can be used to create a User object. Could
+            # be used with `update()` methods as well.
+            user = serializer.save()
 
-                    return Response(json, status=status.HTTP_201_CREATED)
+            if user:
+                json = serializer.data
 
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                return Response(json, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
