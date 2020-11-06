@@ -226,6 +226,82 @@ Only authenticated viewers will be able to access views, and they will authentic
     }
     ```
     - Refresh tokens last 14 days are are used to get Access tokens, which last 5 minutes. A view can only be accessed by a user with a valid Access token, otherwise the user will receive a 401 'unauthorized' error. 
+
+### Authenticating and getting Refresh and Access tokens
+1. Import `include` and add an `api/` path in your `urls.py` file in the project directory. Replace `app_name` with the name of your app directory:
+    ```python
+        from django.urls import path, include # add include to this import
+        
+        urlpatterns = [
+        path('admin/', admin.site.urls),
+        path('api/', include('app_name.urls')) # add this
+    ]
+    ```
+1. In your application folder, add a new `urls.py` file so that we can use the twin views supplied by DRF Simple JWT to obtain token pairs and refresh tokens:
+    ```python
+    from django.urls import path
+    from rest_framework_simplejwt import views as jwt_views
+
+    urlpatterns = [
+        path('token/obtain/', jwt_views.TokenObtainPairView.as_view(), name='token_create'),
+        # override sjwt stock token
+        path('token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
+    ]
+    ```
+1. Test what you've implemented so far by using CURL with the superuser credentials you set above:
+    ```
+    $ curl --header "Content-Type: application/json" -X POST http://127.0.0.1:8000/api/token/obtain/ --data '{"username":"djsr","password":"djsr"}'
+    ```
+1. You should see something similar to the below returned if successful:
+    ```
+    {"refresh":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTYwNTgyMjkyNSwianRpIjoiY2Q2ZDhkOWJjMGUyNDE4MDgzNjU3NjI4NTVhYmI5ZDUiLCJ1c2VyX2lkIjoxfQ.nE9TAGGfoIbMKdysksBttpGTn895WP8vwfhVdjf-TAg","access":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjA0NjEzNjI1LCJqdGkiOiJmMDllZmE5YWU5ZjE0M2ExYWNhMjkxYTAyNWRjMmJkZCIsInVzZXJfaWQiOjF9.bR-OFklxLDy0DBuR-Jr8m_f2shko7rUzAaSJ-wxGfw8"}
+    ```
+1. Now take that refresh token and check to see if it generates an access token by using CURL:
+    ```
+    curl --header "Content-Type: application/json" -X POST http://127.0.0.1:8000/api/token/refresh/ --data '{"refresh":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTYwNTgyMjkyNSwianRpIjoiY2Q2ZDhkOWJjMGUyNDE4MDgzNjU3NjI4NTVhYmI5ZDUiLCJ1c2VyX2lkIjoxfQ.nE9TAGGfoIbMKdysksBttpGTn895WP8vwfhVdjf-TAg","access":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjA0NjEzNjI1LCJqdGkiOiJmMDllZmE5YWU5ZjE0M2ExYWNhMjkxYTAyNWRjMmJkZCIsInVzZXJfaWQiOjF9.bR-OFklxLDy0DBuR-Jr8m_f2shko7rUzAaSJ-wxGfw8"}'
+    ```
+    - You should have an `access` token object returned if successful. If you go over to jwt.io, you can plug in either your refresh or access token and see the header and payload. 
+
+### Build out a User Serializer
+1. Create a `serializers.py` file in your app folder, and add the following code. Serializers are used to parse things like models into usable Python data structures:
+    ```python
+    from rest_framework import serializers
+    from .models import User
+
+
+    class UserSerializer(serializers.ModelSerializer):
+        email = serializers.EmailField( required=True )
+        username = serializers.CharField()
+        first_name = serializers.CharField()
+        last_name = serializers.CharField()
+        password = serializers.CharField(min_length=8, write_only=True)
+        
+        class Meta:
+            model = User
+            fields = ('email', 'username', 'first_name', 'last_name', 'password')
+            extra_kwargs = {'password': {'write_only': True}}
+        
+        def create(self, validated_data):
+            password = validated_data.pop('password', None)
+            instance = self.Meta.model(**validated_data) # as long as the fields are the same, we can just use this
+            if password is not None:
+                instance.set_password(password)
+            
+            instance.save()
+            
+            return instance
+        ```
+
+
+### Create Other Serializers
+1. Add a serializers for every model in your `serializers.py` file:
+    ```python
+    class PlaceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Place
+        fields = ('id', 'created_by', 'latitude', 'longitude')
+    ```
+
 ## Frontend Setup
 https://www.saaspegasus.com/guides/modern-javascript-for-django-developers/client-server-architectures/
 
