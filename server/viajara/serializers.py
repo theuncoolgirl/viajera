@@ -1,5 +1,14 @@
 from rest_framework import serializers
-from .models import *
+from .models import User, Place, List, ListEntry, Photo
+
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super(MyTokenObtainPairSerializer, cls).get_token(user)
+        return token
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -29,23 +38,27 @@ class UserSerializer(serializers.ModelSerializer):
 class PlaceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Place
-        fields = ('id', 'created_by', 'latitude', 'longitude')
+        fields = ('id', 'created_by', 'latitude', 'longitude', 'created_at',
+                  'updated_at')
 
 
 class ListSerializer(serializers.ModelSerializer):
     class Meta:
         model = List
-        fields = ('id', 'user_id', 'name', 'description')
+        fields = ('id', 'user_id', 'name', 'description',
+                  'created_at', 'updated_at')
 
 
 class ListEntrySerializer(serializers.ModelSerializer):
     class Meta:
         model = ListEntry
-        fields = ('id', 'place_id', 'list_id', 'notes')
+        fields = ('id', 'place_id', 'list_id',
+                  'notes', 'created_at', 'updated_at')
 
 
-class Photo(model.Model):
+class Photo(serializers.ModelSerializer):
     class Meta:
         model = Photo
         fields = ('id', 'place_id', 'list_entry_id',
-                  'created_by', 'img_url', 'description', 'date')
+                  'created_by', 'img_url', 'description', 'date', 'created_at',
+                  'updated_at')

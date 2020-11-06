@@ -261,9 +261,44 @@ Only authenticated viewers will be able to access views, and they will authentic
     curl --header "Content-Type: application/json" -X POST http://127.0.0.1:8000/api/token/refresh/ --data '{"refresh":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTYwNTgyMjkyNSwianRpIjoiY2Q2ZDhkOWJjMGUyNDE4MDgzNjU3NjI4NTVhYmI5ZDUiLCJ1c2VyX2lkIjoxfQ.nE9TAGGfoIbMKdysksBttpGTn895WP8vwfhVdjf-TAg","access":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjA0NjEzNjI1LCJqdGkiOiJmMDllZmE5YWU5ZjE0M2ExYWNhMjkxYTAyNWRjMmJkZCIsInVzZXJfaWQiOjF9.bR-OFklxLDy0DBuR-Jr8m_f2shko7rUzAaSJ-wxGfw8"}'
     ```
     - You should have an `access` token object returned if successful. If you go over to jwt.io, you can plug in either your refresh or access token and see the header and payload. 
+### Create the Obtain Token Serializer and View
+1. Add a serializer to the `serializers.py` file for the token. More on serializers will be described below:
+    ```python
+    from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
+    class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+        @classmethod
+        def get_token(cls, user):
+            token = super(MyTokenObtainPairSerializer, cls).get_token(user)
+            return token
+    ```
+1. Add a corresponding view in the `views.py` file for the token:
+    ```python
+    from rest_framework_simplejwt.views import TokenObtainPairView
+    from rest_framework import status, permissions
+    from .serializers import MyTokenObtainPairSerializer
+
+    class ObtainTokenPair(TokenObtainPairView):
+        permission_classes = (permissions.AllowAny,)
+        serializer_class = MyTokenObtainPairSerializer
+    ```
+1. Replace the packaged entry in `urls.py` in your app directory with the following to utilize your new view for `token/obtain/`:
+    ```python
+    from django.urls import path
+    from rest_framework_simplejwt import views as jwt_views
+    from .views import ObtainTokenPair
+
+    urlpatterns = [
+        path('token/obtain/', ObtainTokenPair.as_view(), name='token_create'),
+        path('token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
+    ]
+    ```
+1. Test everything out again with CURL to make sure you are still receiving the token:
+    ```
+    curl --header "Content-Type: application/json" -X POST http://127.0.0.1:8000/api/token/obtain/ --data '{"username":"username","password":"passwordd"}'
+    ```
 ### Build out a User Serializer
-1. Create a `serializers.py` file in your app folder, and add the following code. Serializers are used to parse things like models into usable Python data structures:
+1. Create a `serializers.py` file in your app folder, and add the following code. Serializers are used to convert data in your models into usable Python data structures, which can be rendered into JSON to be used in React on the client side:
     ```python
     from rest_framework import serializers
     from .models import User
