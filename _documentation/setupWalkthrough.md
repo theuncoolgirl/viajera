@@ -376,6 +376,156 @@ Only authenticated viewers will be able to access views, and they will authentic
     {"email":"ichiro@mariners.com","username":"ichiro1","first_name":"first","last_name":"last"}
     ```
 
+## React Frontend
+### Install React inside Django project as standalone app
+1. In your Django project, make a new Django app to hold React:
+    ```
+    python manage.py startapp frontend
+    ```
+1. In `frontend`, make a `templates` directory, and then make a `frontend` directory inside the `templates` directory. Make an `index.html` file here. This will be the base template for React - prepare it like a standard Django base template for the time being:
+    ```html
+    <!DOCTYPE html>
+    <html> {% load static %}
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{% static 'frontend/style.css' %}">
+        <title>DRF + React = Winning the game</title>
+    </head>
+    <body>
+        <div id="root" class="content"> This will be the base template. </div>
+    </body>
+    </html>
+    ```
+1. Inside the app-level `frontend` directory, create a `static` directory, and another `frontend` folder inside the `static` directory. Create a `style.css` file and put any sort of basic styling here for now. 
+1. In your project folder, add the following path to your `urls.py ` file:
+    ```python
+    urlpatterns = [ ... 
+    path('', include('frontend.urls')) # add this
+    ]
+    ```
+    - make sure to add it to the end, so that anything that does **not** match Django URLS will be handled by the frontend. This lets us use React's router to manage frontend views while still hosting it on the same server, avoiding CORS madness. 
+1. In your `frontend` directory, add the following to `views.py`:
+    ```python
+    from django.shortcuts import render
+    
+    # Create your views here.
+    def index(request): 
+        return render(request, 'frontend/index.html', context=None)
+    ```
+1. In your `frontend` directory, add this view to the frontend URLS. This will catch both an empty URL ('') and every other URL:
+    ```python
+    urlpatterns = [
+        path('', index_view), # for the empty url
+        url(r'^.*/$', index_view) # for all other urls
+    ]
+    ```
+1. Run your server again and see if you have `This will be the base template` rendered at both `http://127.0.0.1/` and `http://127.0.0.1/anythingelse/`. Django by default appends a `/` to the end of each URL, which is why we have the `/$` at the end of the regex above. 
+
+### Set up Babel and Webpack in the frontend app
+1. We can't use Create React App here due to oue configuration with Django, so we'll need to build our own toolchain. 
+1. Use `npm init` to create the `package.json` file in the root folder of the app (where the `Pipfile` is). 
+1. Within the `frontend` app directory, create a `src` directory - this will hold all of our React Components. 
+1. Within the `frontend/static/frontend` directory, create a `public` directory. 
+1. Add the following to the bottom of the `index.html` file. This intersects django and react. When compiled, the React components will be contained in main.js. Django will serve index.html, which will load main.js:
+    ```html
+    <script type="text/javascript" src="{% static 'frontend/public/main.js' %}"></script>
+    ```
+1. Install `@babel/core`, `@babel/preset-env`, and `@babel-preset-react`. Babel takes the code we will write and converts it to JavaScript that can be read by browsers. 
+    ```
+    npm install --save-dev @babel/core@7.4.5 @babel/preset-env@7.4.5 @babel/preset-react@7.0.0
+    ```
+1. Create a `.babelrc` folder in the project root, next to `package.json` in order for us to properly use Babel, and insert the following code:
+    ```
+    { "presets": ["@babel/preset-env", "@babel/preset-react"] }
+    ```
+1. Install Webpack, whic is a bundler that takes our modules (our React components) and converts them into static assets that browsers can load:
+    ```
+    npm install --save-dev webpack webpack-cli babel-loader babel-loader@8.0.6 webpack-cli@3.3.4 webpack@4.35.0
+    ```
+1. Create a `webpack.config.js` file at the root (next to `package.json`) to contain our Webpack configuration. Paste in the following code:
+    ```js
+    const path = require('path');
+
+    module.exports = {
+        mode: "development",
+        entry: path.resolve(__dirname, 'server/frontend/src/index.js'),
+        // Webpack will find the start of our React app and bundle from there
+        output: {
+            // options related to how webpack emits results 
+            // where compiled files go:
+            path: path.resolve(__dirname, "server/frontend/static/frontend/public/"),
+            // 127.0.0.1/static/frontend/public/ where static files are served from
+            // (in production using a CDN, the pattern here would be
+            // STATIC_PATH/{{path after emitting}} where STATIC_PATH is wherever your
+            // Django project saves static files after running collectstatic):
+            publicPath: "/static/frontend/public/",
+            filename: 'main.js',
+            // the same one we import in index.html
+        },
+        module: {
+            // configuration regarding modules
+            rules: [{
+                // regex test to find js and jsx files
+                test: /\.(js|jsx)?$/,
+                // don't look in the node_modules/ folder
+                exclude: /node_modules/,
+                // for matching files, use the babel-loader
+                use: {
+                    loader: "babel-loader",
+                    options: {
+                        presets: ["@babel/env"]
+                    }
+                },
+            }],
+        },
+    };
+    ```
+
+### Setup React
+1. Install React:
+    ```
+    npm install --save react react-dom react@16.8.6 react-dom@16.8.6
+    ```
+1. Create a `index.js` file inside your `src` directory - this is what renders the React App in place of the `root` element in `index.html`. 
+    ```js
+    import React from 'react'
+    import { render } from 'react-dom'
+    import App from './components/App';
+
+    render(<App />, document.getElementById('root'));
+    ```
+1. Create a `component` directory inside the `src` directory and create a `App.js` file with the following placeholder:
+    ```js
+    import React, { Component } from "react";
+
+    class App extends Component {
+        render() {
+            return (
+                <div className="site">
+                    <h1>Ahhh after 10,000 years I'm free. Time to conquer the Earth!</h1>
+                </div>
+            );
+        };
+    };
+
+    export default App;
+    ```
+1. Add a `"build"` script to the `"scripts"` section of your `package.json` in order to use Webpack to compile manually (since we are not using the Webpack development server):
+    ```json
+    ...
+    "scripts": {
+        "build": "webpack --config webpack.config.js",
+        ...
+    },
+    ...
+    ```
+1. Run the script above, and you should see a `main.js` file generated in the `public` directory, and new text served in the browser when you restart the server:
+    ```
+    npm run build
+    ```
+Django serves index.html, which grabs main.js. All react components will be contained in main.js. Babel and Webpack will create and compile what is in main.js so that it can be properly served by index.html and viewed on browsers. 
+
 ### Create Other Serializers
 1. Add a serializers for every model in your `serializers.py` file:
     ```python
@@ -385,7 +535,7 @@ Only authenticated viewers will be able to access views, and they will authentic
         fields = ('id', 'created_by', 'latitude', 'longitude')
     ```
 
-## Frontend Setup
+
 https://www.saaspegasus.com/guides/modern-javascript-for-django-developers/client-server-architectures/
 
 1. In that project directory, make a `/client` directory for the front end
