@@ -15,6 +15,7 @@ class UserCreate(APIView):
     # only to authenticated users, so the permission must be set manually to
     # `AllowAny` so that an unauthenticated user can actually sign up.
     permission_classes = (permissions.AllowAny,)
+    authentication_classes = ()
 
     # this view just has a POST endpoint to create a new user
     def post(self, request, format='json'):

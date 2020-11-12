@@ -1,4 +1,16 @@
 #root{ 
-    background-color:rebeccapurple;
+    background-color:black;
     color: white
+}
+
+.nav-link{ 
+    color:white;
+    border: 1px solid white;
+    padding: 1em;
+    text-decoration: none}
+
+.nav-link:hover{ 
+    color:white;
+    border: 1px solid white;
+    padding: 1em; 
 }

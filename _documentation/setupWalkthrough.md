@@ -1,3 +1,5 @@
+cors: https://stackoverflow.com/questions/44037474/cors-error-while-consuming-calling-rest-api-with-react
+
 # Django-React App Setup
 ## Backend Setup
 We are building two separate apps that will ultimately be connected - the React frontend client and the Django API backend. In the backend, we'll create a RESTful API using Django (with methods like GET, POST, etc). In the frontend, we'll hit this API using React. 
@@ -524,6 +526,48 @@ Only authenticated viewers will be able to access views, and they will authentic
     ```
     npm run build
     ```
+
+### Set up Routing
+1. Install `react-router-dom`. React Router is a frontend routing library that allows you to control which components to display using the browser location:
+    ```
+    npm install react-router-dom@5.0.1
+    ```
+1. We'll be using `BrowserRouter`, which is the preferred choice when building an SPA or when the React app is backed by a dynamic server (which we have thanks to Django). In `index.js`, wrap the `App` component with a `BrowserRouter` component. It creates a React context that passes routing information down to all its descendent components.:
+    ```js
+    import {BrowserRouter} from 'react-router-dom'
+    ...
+    <BrowserRouter> 
+        <App />
+    </BrowserRouter>
+    ...
+    ```
+1. Update the App component as follows: 
+    ```js
+    import React, { Component } from "react";
+    import { Link, Route, Switch } from "react-router-dom";
+    import { Login, Signup } from ".";
+
+    class App extends Component {
+        render() {
+            return (
+                <div className="site">
+                    <main>
+                        <h1>Ahhh after 10,000 years I'm free. Time to conquer the Earth!</h1>
+                        <Switch>
+                            <Route exact path={"/login/"} component={Login} />
+                            <Route exact path={"/signup/"} component={Signup} />
+                            <Route path={"/"} render={() => <div>Home again</div>} />
+                        </Switch>
+                    </main>
+                </div>
+            );
+        };
+    };
+
+    export default App;
+    ```
+    - `Switch` allows us to switch out the components that are rendered based on the defined routes. 
+
 Django serves index.html, which grabs main.js. All react components will be contained in main.js. Babel and Webpack will create and compile what is in main.js so that it can be properly served by index.html and viewed on browsers. 
 
 ### Create Other Serializers
