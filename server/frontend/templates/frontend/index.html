@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html> {% load static %}
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'frontend/style.css' %}">
+    <title>DRF + React = Winning the game</title>
+</head>
+
+<body>
+    <div id="root" class="content"> This will be the base template. </div>
+</body>
+
+</html>
+<script type="text/javascript" src="{% static 'frontend/public/main.js' %}"></script>
+<!-- This intersects django and react. When compiled, the React components
+    will be contained in main.js. Django will serve index.html, which will load
+    main.js. -->
