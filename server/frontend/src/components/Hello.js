@@ -21,6 +21,7 @@ class Hello extends Component {
             return message;
         } catch (error) {
             window.location.href = '/login/';
+            // when refactored for redux, change to useHistory
             console.log("Error: ", JSON.stringify(error, null, 4));
             throw error;
         }

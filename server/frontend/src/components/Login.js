@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { useDispatch } from 'react-redux';
+import { useHistory } from "react-router-dom";
 import { thunks } from "../store/session";
 
 const Login = () => {
     const dispatch = useDispatch();
+    const history = useHistory();
     const login = (username, password) => dispatch(thunks.login(username, password))
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -14,7 +16,9 @@ const Login = () => {
     const loginHandler = e => {
         e.preventDefault()
         login(username, password)
-        window.location.href = "/"
+        // if (localStorage.getItem("access_token")) {
+        //     window.location.href = "/hello/"
+        // }
     }
 
     return (

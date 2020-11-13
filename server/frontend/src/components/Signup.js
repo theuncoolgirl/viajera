@@ -25,7 +25,6 @@ const Signup = () => {
     const signupHandler = e => {
         e.preventDefault()
         signup(first_name, last_name, username, email, password)
-        window.location.href = "/login/"
     }
 
     return (
