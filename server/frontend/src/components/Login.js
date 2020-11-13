@@ -16,9 +16,12 @@ const Login = () => {
     const loginHandler = e => {
         e.preventDefault()
         login(username, password)
-        // if (localStorage.getItem("access_token")) {
-        //     window.location.href = "/hello/"
-        // }
+    }
+
+    const popDemoUser = e => {
+        e.preventDefault()
+        login("demo-user", "demopassword123")
+        history.push('/hello/')
     }
 
     return (
@@ -35,6 +38,7 @@ const Login = () => {
                 </label>
                 <input type="submit" value="Submit" />
             </form>
+            <button onClick={popDemoUser}>Demo User</button>
         </div>
     )
 }
