@@ -1,3 +1,4 @@
+const Dotenv = require('dotenv-webpack');
 const path = require('path');
 
 module.exports = {
@@ -16,6 +17,9 @@ module.exports = {
         filename: 'main.js',
         // the same one we import in index.html
     },
+    plugins: [
+        new Dotenv()
+    ],
     module: {
         // configuration regarding modules
         rules: [{
