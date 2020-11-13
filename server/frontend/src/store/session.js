@@ -4,7 +4,7 @@ import axiosInstance from "../axiosApi";
 // const SET_PASSWORD = "viajara/session/SET_PASSWORD";
 const SET_ERRORS = 'viajara/session/SET_ERRORS';
 
-// const setUsername = user => ({ type: SET_USERNAME, user });
+// const setUsername = user => ({ type: SET_USERNAME, username });
 // const setPassword = password => ({ type: SET_PASSWORD, password });
 const setErrors = errors => ({ type: SET_ERRORS, errors });
 
@@ -92,17 +92,17 @@ export default function reducer(state = {}, action) {
         // case SET_USERNAME:
         //     return {
         //         ...state,
-        //         username: action.value
+        //         username: action.username
         //     }
         // case SET_PASSWORD:
         //     return {
         //         ...state,
-        //         password: action.value
+        //         password: action.password
         //     }
         case SET_ERRORS:
             return {
                 ...state,
-                errors: action.value
+                errors: action.errors
             }
         default:
             return state;
