@@ -1,74 +1,66 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
+import { useDispatch } from 'react-redux';
+import { thunks } from "../store/session";
 import axiosInstance from "../axiosApi";
 
-class Signup extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { username: "", password: "", email: "", first_name: "", last_name: "" };
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+const Signup = () => {
+    const dispatch = useDispatch();
+    const signup = (first_name, last_name, username, email, password) => {
+        dispatch(thunks.signup(first_name, last_name, username, email, password))
     }
 
-    handleChange(event) {
-        this.setState({ [event.target.name]: event.target.value });
+    const [first_name, setFirstName] = useState("");
+    const [last_name, setLastName] = useState("");
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [errors, setErrors] = useState("");
+
+    const updateFirstName = (e) => setFirstName(e.target.value);
+    const updateLastName = (e) => setLastName(e.target.value);
+    const updateUsername = (e) => setUsername(e.target.value);
+    const updateEmail = (e) => setEmail(e.target.value);
+    const updatePassword = (e) => setPassword(e.target.value);
+
+    const signupHandler = e => {
+        e.preventDefault()
+        signup(first_name, last_name, username, email, password)
+        window.location.href = "/login/"
     }
 
-    async handleSubmit(event) {
-        event.preventDefault();
-        try {
-            const response = await axiosInstance.post('user/create/',
-                {
-                    first_name: this.state.first_name,
-                    last_name: this.state.last_name,
-                    username: this.state.username,
-                    email: this.state.email,
-                    password: this.state.password
-                }
-            )
-            return response;
-        } catch (error) {
-            console.log(error.stack);
-            this.setState({
-                errors: error.response.data
-            });
-        }
-    }
-
-    render() {
-        return (
-            <div>
-                Signup
-                <form onSubmit={this.handleSubmit}>
-                    <label>
-                        First Name:
-                        <input name="first_name" type="text" value={this.state.first_name} onChange={this.handleChange} />
-                        {this.state.errors && this.state.errors.first_name ? this.state.errors.first_name : null}
-                    </label>
-                    <label>
-                        Last Name:
-                        <input name="last_name" type="text" value={this.state.last_name} onChange={this.handleChange} />
-                        {this.state.errors && this.state.errors.last_name ? this.state.errors.last_name : null}
-                    </label>
-                    <label>
-                        Username:
-                        <input name="username" type="text" value={this.state.username} onChange={this.handleChange} />
-                        {this.state.errors && this.state.errors.username ? this.state.errors.username : null}
-                    </label>
-                    <label>
-                        Email:
-                        <input name="email" type="email" value={this.state.email} onChange={this.handleChange} />
-                        {this.state.errors && this.state.errors.email ? this.state.errors.email : null}
-                    </label>
-                    <label>
-                        Password:
-                        <input name="password" type="password" value={this.state.password} onChange={this.handleChange} />
-                        {this.state.errors && this.state.errors.password ? this.state.errors.password : null}
-                    </label>
-                    <input type="submit" value="Submit" />
-                </form>
-            </div>
-        )
-    }
+    return (
+        <div>
+            Signup
+            <form onSubmit={signupHandler}>
+                <label>
+                    First Name:
+                        <input name="first_name" type="text" value={first_name} onChange={updateFirstName} />
+                    {errors && errors.first_name ? errors.first_name : null}
+                </label>
+                <label>
+                    Last Name:
+                        <input name="last_name" type="text" value={last_name} onChange={updateLastName} />
+                    {errors && errors.last_name ? errors.last_name : null}
+                </label>
+                <label>
+                    Username:
+                        <input name="username" type="text" value={username} onChange={updateUsername} />
+                    {errors && errors.username ? errors.username : null}
+                </label>
+                <label>
+                    Email:
+                        <input name="email" type="email" value={email} onChange={updateEmail} />
+                    {errors && errors.email ? errors.email : null}
+                </label>
+                <label>
+                    Password:
+                        <input name="password" type="password" value={password} onChange={updatePassword} />
+                    {errors && errors.password ? errors.password : null}
+                </label>
+                <input type="submit" value="Submit" />
+            </form>
+        </div>
+    )
 }
 
 export default Signup;

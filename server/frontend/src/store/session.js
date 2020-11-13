@@ -15,7 +15,6 @@ export const actions = {
 }
 
 const login = (username, password) => {
-    console.log(username, password)
     return async dispatch => {
         const response = await axiosInstance.post('/token/obtain/',
             { username: username, password: password }
@@ -33,8 +32,40 @@ const login = (username, password) => {
     }
 }
 
+const signup = (first_name, last_name, username, email, password) => {
+    return async dispatch => {
+        const response = await axiosInstance.post('user/create/',
+            {
+                first_name: first_name,
+                last_name: last_name,
+                username: username,
+                email: email,
+                password: password
+            }
+        );
+        if (response.status === 401) {
+            let errors = await response.json()
+            dispatch(setErrors(errors))
+        } else {
+            console.log("SIGNUP response: ", response)
+            return response
+        }
+
+    }
+}
+
+// other error handling - maybe refactor in future
+//     } catch (error) {
+//         console.log(error.stack);
+//         this.setState({
+//             errors: error.response.data
+//         });
+//     }
+// }
+
 export const thunks = {
     login,
+    signup
 }
 
 export default function reducer(state = {}, action) {
