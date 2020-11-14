@@ -28,7 +28,6 @@
     "webpack-cli": "^3.3.4"
   },
   "dependencies": {
-    "@reach/combobox": "^0.11.2",
     "@react-google-maps/api": "^1.13.0",
     "axios": "^0.19.0",
     "date-fns": "^2.16.1",
