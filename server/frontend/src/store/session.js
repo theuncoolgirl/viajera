@@ -1,16 +1,10 @@
 import axiosInstance from "../axiosApi";
 
-// const SET_USERNAME = "viajara/session/SET_USER";
-// const SET_PASSWORD = "viajara/session/SET_PASSWORD";
 const SET_ERRORS = 'viajara/session/SET_ERRORS';
 
-// const setUsername = user => ({ type: SET_USERNAME, username });
-// const setPassword = password => ({ type: SET_PASSWORD, password });
 const setErrors = errors => ({ type: SET_ERRORS, errors });
 
 export const actions = {
-    // setUsername,
-    // setPassword,
     setErrors
 }
 
@@ -89,16 +83,6 @@ export const thunks = {
 
 export default function reducer(state = {}, action) {
     switch (action.type) {
-        // case SET_USERNAME:
-        //     return {
-        //         ...state,
-        //         username: action.username
-        //     }
-        // case SET_PASSWORD:
-        //     return {
-        //         ...state,
-        //         password: action.password
-        //     }
         case SET_ERRORS:
             return {
                 ...state,
