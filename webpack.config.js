@@ -18,7 +18,9 @@ module.exports = {
         // the same one we import in index.html
     },
     plugins: [
-        new Dotenv()
+        new Dotenv({
+            path: './server/server/.env',
+        })
     ],
     module: {
         // configuration regarding modules
