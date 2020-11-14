@@ -2,6 +2,7 @@ import React from "react";
 import { GoogleMap, useLoadScript, Market, InfoWindow } from "@react-google-maps/api";
 import { formatRelative } from "date-fns";
 import usePlacesAutocomplete, { getGeocode, getLatLng } from "use-places-autocomplete";
+import mapStyles from "./utils/mapStyles";
 
 // put the array containing the libraries outside of the PlaceMap component,
 // because when React re-renders, arrays and objects used as literals appear to
@@ -18,9 +19,9 @@ const mapContainerStyle = {
 
 const center = { lat: -31.4201, lng: -64.1888 }
 
-// const options = {
-//     styles:
-// }
+const options = {
+    styles: mapStyles
+}
 
 const PlaceMap = () => {
     // hook that loads google map scripts
@@ -37,7 +38,8 @@ const PlaceMap = () => {
             <GoogleMap
                 mapContainerStyle={mapContainerStyle}
                 zoom={8}
-                center={center}>
+                center={center}
+                options={options}>
             </GoogleMap>
         </div>
     )
