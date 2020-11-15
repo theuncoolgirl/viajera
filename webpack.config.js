@@ -24,18 +24,31 @@ module.exports = {
     ],
     module: {
         // configuration regarding modules
-        rules: [{
-            // regex test to find js and jsx files
-            test: /\.(js|jsx)?$/,
-            // don't look in the node_modules/ folder
-            exclude: /node_modules/,
-            // for matching files, use the babel-loader
-            use: {
-                loader: "babel-loader",
-                options: {
-                    presets: ["@babel/env"]
-                }
+        rules: [
+            {
+                // regex test to find js and jsx files
+                test: /\.(js|jsx)?$/,
+                // don't look in the node_modules/ folder
+                exclude: /node_modules/,
+                // for matching files, use the babel-loader
+                use: {
+                    loader: "babel-loader",
+                    options: {
+                        presets: ["@babel/env"]
+                    }
+                },
             },
-        }],
+            {
+                test: /\.svg$/,
+                use: [
+                    {
+                        loader: "svg-url-loader",
+                        options: {
+                            limit: 10000,
+                        },
+                    },
+                ],
+            },
+        ],
     },
 };
