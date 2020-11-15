@@ -1,8 +1,10 @@
-import React from "react";
-import { GoogleMap, useLoadScript, Market, InfoWindow } from "@react-google-maps/api";
+import React, { Component, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { GoogleMap, useLoadScript, Marker, InfoWindow } from "@react-google-maps/api";
 import { formatRelative } from "date-fns";
 import usePlacesAutocomplete, { getGeocode, getLatLng } from "use-places-autocomplete";
 import mapStyles from "./utils/mapStyles";
+import { thunks } from "../store/map";
 
 // put the array containing the libraries outside of the PlaceMap component,
 // because when React re-renders, arrays and objects used as literals appear to
@@ -29,10 +31,7 @@ const options = {
 }
 
 // helps prevent re-renders when referencing the map
-const mapRef = React.useRef();
-const onMapLoad = React.useCallback((map) => {
-    mapRef.current = map;
-}, []);
+
 
 const PlaceMap = () => {
     // hook that loads google map scripts
@@ -41,6 +40,19 @@ const PlaceMap = () => {
         libraries
     })
 
+    const mapRef = React.useRef();
+    const onMapLoad = React.useCallback((map) => {
+        mapRef.current = map;
+    }, []);
+
+    const dispatch = useDispatch();
+    const getPlaces = () => dispatch(thunks.getPlaces());
+    const places = useSelector(state => state.map.places)
+
+    useEffect(() => {
+        getPlaces();
+    }, [dispatch]);
+
     if (loadError) return "Error loading maps";
     if (!isLoaded) return "Loading Map...";
 
@@ -48,10 +60,16 @@ const PlaceMap = () => {
         <div>
             <GoogleMap
                 mapContainerStyle={mapContainerStyle}
-                zoom={8}
-                center={center}
+                zoom={13}
+                center={center} //hard-coded for Cordoba current, add geolocation
                 options={options}
                 onLoad={onMapLoad}>
+                {places.map((place) => (
+                    <Marker
+                        key={place.created_at}
+                        position={{ lat: parseFloat(place.latitude), lng: parseFloat(place.longitude) }} />
+                ))}
+                {console.log("places: ", places)}
             </GoogleMap>
         </div>
     )
