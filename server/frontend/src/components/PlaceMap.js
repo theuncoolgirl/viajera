@@ -85,7 +85,11 @@ const PlaceMap = () => {
                         position={{
                             lat: parseFloat(selected.latitude),
                             lng: parseFloat(selected.longitude)
-                        }}>
+                        }}
+                        onCloseClick={() => {
+                            setSelected(null)
+                        }}
+                    >
                         <div>
                             <p style={{ color: "black" }}>Placeholder for Info Window</p>
                         </div>
