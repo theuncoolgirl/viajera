@@ -14,14 +14,25 @@ const libraries = ["places"];
 // designating its dimensions, it will not show up. 
 const mapContainerStyle = {
     width: '100vw',
-    height: '100vh',
+    height: '80vh',
 }
 
 const center = { lat: -31.4201, lng: -64.1888 }
 
 const options = {
-    styles: mapStyles
+    styles: mapStyles,
+    mapTypeControl: false,
+    streetViewControl: false,
+    rotateControl: false,
+    fullscreenControl: true,
+    zoomControl: true
 }
+
+// helps prevent re-renders when referencing the map
+const mapRef = React.useRef();
+const onMapLoad = React.useCallback((map) => {
+    mapRef.current = map;
+}, []);
 
 const PlaceMap = () => {
     // hook that loads google map scripts
@@ -39,7 +50,8 @@ const PlaceMap = () => {
                 mapContainerStyle={mapContainerStyle}
                 zoom={8}
                 center={center}
-                options={options}>
+                options={options}
+                onLoad={onMapLoad}>
             </GoogleMap>
         </div>
     )
