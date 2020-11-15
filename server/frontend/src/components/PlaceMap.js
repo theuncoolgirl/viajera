@@ -5,6 +5,7 @@ import { formatRelative } from "date-fns";
 import usePlacesAutocomplete, { getGeocode, getLatLng } from "use-places-autocomplete";
 import mapStyles from "./utils/mapStyles";
 import { thunks } from "../store/map";
+import icon from "../../public/marker.svg"
 
 // put the array containing the libraries outside of the PlaceMap component,
 // because when React re-renders, arrays and objects used as literals appear to
@@ -67,7 +68,12 @@ const PlaceMap = () => {
                 {places.map((place) => (
                     <Marker
                         key={place.created_at}
-                        position={{ lat: parseFloat(place.latitude), lng: parseFloat(place.longitude) }} />
+                        position={{ lat: parseFloat(place.latitude), lng: parseFloat(place.longitude) }}
+                        icon={{
+                            url: icon,
+                            scaledSize: new window.google.maps.Size(30, 30)
+                        }}
+                    />
                 ))}
                 {console.log("places: ", places)}
             </GoogleMap>
