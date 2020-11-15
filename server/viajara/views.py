@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework import status, permissions
+from rest_framework import status, permissions, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import MyTokenObtainPairSerializer, UserSerializer
+from .models import Place
+from .serializers import MyTokenObtainPairSerializer, PlaceSerializer, UserSerializer
 
 
 class ObtainTokenPair(TokenObtainPairView):
@@ -53,3 +54,24 @@ class LogoutAndBlacklistRefreshToken(APIView):
             return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class PlaceCreate(generics.ListCreateAPIView):
+    # permission_classes = (permissions.AllowAny,)
+    # authentication_classes = ()
+    queryset = Place.objects.all()
+    serializer_class = PlaceSerializer
+
+    # def get(self, request):
+    # places = Place.objects.all()
+    # print(places)
+    # return Response(data={"hello": "world"}, status=status.HTTP_200_OK)
+    # places = [{
+    #     "id": place.id,
+    #     "created_by": place.created_by,
+    #     "latitude": place.latitude,
+    #     "longitude": place.longitude,
+    #     "created_at": place.created_at,
+    #     "updated_at": place.updated_at
+    # } for place in Place.objects.all()]
+    # return Response(places)
