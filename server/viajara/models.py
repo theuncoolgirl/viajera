@@ -9,8 +9,8 @@ class User(AbstractUser):
 
 class Place(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    latitude = models.DecimalField(max_digits=6, decimal_places=3)
-    longitude = models.DecimalField(max_digits=6, decimal_places=3)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6)
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
 
