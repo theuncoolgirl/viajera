@@ -1,8 +1,14 @@
 import axiosInstance from "../axiosApi";
 
 const SET_PLACES = 'viajara/map/SET_PLACES'
+const SET_SELECTED = 'viajara/map/SET_SELECTED'
 
 const setPlaces = places => ({ type: SET_PLACES, places });
+const setSelected = selected => ({ type: SET_SELECTED, selected });
+
+export const actions = {
+    setSelected,
+}
 
 const getPlaces = () => {
     return async dispatch => {
@@ -18,15 +24,24 @@ const getPlaces = () => {
 }
 
 export const thunks = {
-    getPlaces
+    getPlaces,
 }
 
-export default function reducer(state = {}, action) {
+const initialState = {
+    selected: null
+}
+
+export default function reducer(state = initialState, action) {
     switch (action.type) {
         case SET_PLACES:
             return {
                 ...state,
                 places: action.places
+            }
+        case SET_SELECTED:
+            return {
+                ...state,
+                selected: action.selected
             }
         default:
             return state;
