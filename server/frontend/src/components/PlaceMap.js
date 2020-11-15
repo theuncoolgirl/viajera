@@ -4,7 +4,7 @@ import { GoogleMap, useLoadScript, Marker, InfoWindow } from "@react-google-maps
 import { formatRelative } from "date-fns";
 import usePlacesAutocomplete, { getGeocode, getLatLng } from "use-places-autocomplete";
 import mapStyles from "./utils/mapStyles";
-import { thunks } from "../store/map";
+import { actions, thunks } from "../store/map";
 import icon from "../../public/marker.svg"
 
 // put the array containing the libraries outside of the PlaceMap component,
@@ -48,7 +48,9 @@ const PlaceMap = () => {
 
     const dispatch = useDispatch();
     const getPlaces = () => dispatch(thunks.getPlaces());
-    const places = useSelector(state => state.map.places)
+    const places = useSelector(state => state.map.places);
+    const setSelected = (selected) => dispatch(actions.setSelected(selected));
+    const selected = useSelector(state => state.map.selected);
 
     useEffect(() => {
         getPlaces();
@@ -73,9 +75,22 @@ const PlaceMap = () => {
                             url: icon,
                             scaledSize: new window.google.maps.Size(30, 30)
                         }}
+                        onClick={() => {
+                            setSelected(place);
+                        }}
                     />
                 ))}
-                {console.log("places: ", places)}
+                {selected ? (
+                    <InfoWindow
+                        position={{
+                            lat: parseFloat(selected.latitude),
+                            lng: parseFloat(selected.longitude)
+                        }}>
+                        <div>
+                            <p style={{ color: "black" }}>Placeholder for Info Window</p>
+                        </div>
+                    </InfoWindow>
+                ) : null}
             </GoogleMap>
         </div>
     )
