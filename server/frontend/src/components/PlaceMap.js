@@ -7,6 +7,7 @@ import mapStyles from "./utils/mapStyles";
 import { actions, thunks } from "../store/map";
 import icon from "../../public/marker.svg"
 import Search from "./Search";
+import PlaceOptions from "./PlaceOptions";
 
 import "@reach/combobox/styles.css";
 
@@ -73,12 +74,18 @@ const PlaceMap = () => {
     const clickedLocation = useSelector(state => state.map.clickedLocation);
     const getPlaceDetails = () => dispatch(thunks.getPlaceDetails());
     const placeDetails = useSelector(state => state.map.placeDetails);
+    const setListDisplay = (isDisplayed) => dispatch(actions.setListDisplay(isDisplayed));
+    const isDisplayed = useSelector(state => state.map.listDisplay)
     // const getPlacePhoto = () => dispatch(thunks.getPlacePhoto());
     // const placePhoto = useSelector(state => state.map.placePhoto);
 
     useEffect(() => {
         getPlaces();
     }, [dispatch, placeDetails]);
+
+    const toggleListDisplay = (e) => {
+        setListDisplay(!isDisplayed);
+    }
 
     const handleClick = (e) => {
         e.stop();
@@ -91,11 +98,13 @@ const PlaceMap = () => {
         if (clickedLocation.placeId) {
             getPlaceDetails();
             // getPlacePhoto();
-            console.log("Place Details: ", placeDetails);
+            // toggleListDisplay();
         } else {
             console.log("No place Id")
         }
     }
+
+
 
     if (loadError) return "Error loading maps";
     if (!isLoaded) return "Loading Map...";
@@ -105,16 +114,17 @@ const PlaceMap = () => {
 
             <div style={{ display: "flex" }}>
                 {placeDetails ?
-                    <div style={{ color: "black", backgroundColor: "white", width: "30vw", height: "95vh" }}>
-                        <p>{placeDetails.name}</p>
-                        <p>{toTitleCase(placeDetails.types[0].split('_').join(' '))}</p>
-                        <p>Address and Contacts</p>
-                        <p>{placeDetails.formatted_address}</p>
-                        <p>GPS: {placeDetails.geometry.location.lat}, {placeDetails.geometry.location.lng}</p>
-                        <p>Phone: {placeDetails.formatted_phone_number}</p>
-                        <p>Website: {placeDetails.website}</p>
-                        <p>Business Status: {placeDetails.business_status}</p>
-                        <p>User Rating: {placeDetails.rating}</p>
+                    <div style={{ color: "black", backgroundColor: "white", width: 350, height: "95vh", borderRight: "2px solid #c3d6d6", paddingRight: 10 }}>
+                        <h3 style={{ marginLeft: 10 }}>{placeDetails.name}</h3>
+                        <PlaceOptions />
+                        {/* {toTitleCase(placeDetails.types[0].split('_').join(' '))} */}
+                        <h4 style={{ marginLeft: 15 }}>Address and Contacts</h4>
+                        <p style={{ marginLeft: 20 }}>{placeDetails.formatted_address}</p>
+                        <p style={{ marginLeft: 20 }}>GPS: <span style={{ color: "#6a8383" }}>{placeDetails.geometry.location.lat}, {placeDetails.geometry.location.lng}</span></p>
+                        <p style={{ marginLeft: 20 }}>Phone: <span style={{ color: "#6a8383" }}>{placeDetails.formatted_phone_number}</span></p>
+                        <p style={{ marginLeft: 20 }}><span style={{ color: "#6a8383" }}>{placeDetails.website}</span></p>
+                        {/* <p>Business Status: {placeDetails.business_status}</p> */}
+                        <p style={{ marginLeft: 20 }}>Rating: <span style={{ color: "#6a8383" }}>{placeDetails.rating}</span></p>
                         {/* <ul> Reviews:
                             {placeDetails.reviews.map((review) => {
                             <li>{review.text}</li>
@@ -124,6 +134,17 @@ const PlaceMap = () => {
                     : null}
                 <div style={{ width: 'auto', height: '95vh', flexGrow: 1, position: "relative" }}>
                     <Search panTo={panTo} />
+                    <button
+                        onClick={toggleListDisplay}
+                        className={"listButton"}
+                        style={{
+                            position: "absolute",
+                            top: "1rem",
+                            right: "4rem",
+                            zIndex: 10,
+                        }}
+                    >
+                        My List</button>
                     <GoogleMap
                         id="map"
                         mapContainerStyle={mapContainerStyle}
@@ -164,8 +185,19 @@ const PlaceMap = () => {
                         ) : null} */}
                     </GoogleMap>
                 </div>
+                {isDisplayed ?
+                    <div style={{ color: "black", backgroundColor: "white", width: 350, height: "95vh", borderLeft: "2px solid #c3d6d6", paddingLeft: 10 }}>
+                        <h3 style={{ marginLeft: 10 }}>My Saved Places</h3>
+                        <h4 style={{ marginLeft: 15 }}>Parque Sarmiento</h4>
+                        <p style={{ marginLeft: 20, color: "#6a8383" }}>Beautiful in the summer! Has a killer skatepark.</p>
+                        <h4 style={{ marginLeft: 15 }}>Paseo del Jockey</h4>
+                        <p style={{ marginLeft: 20, color: "#6a8383" }}>Actually a... mall?</p>
+                        <h4 style={{ marginLeft: 15 }}>Universidad Technologia Nacional</h4>
+                        <p style={{ marginLeft: 20, color: "#6a8383" }}>Part of the large university campus, great place to relax and drink mate with friends.</p>
+                    </div>
+                    : null}
             </div>
-        </div>
+        </div >
     )
 }
 

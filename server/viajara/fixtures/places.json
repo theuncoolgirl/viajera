@@ -4,8 +4,9 @@
         "pk": 1,
         "fields": {
             "created_by": 8,
-            "latitude": -31.424604,
-            "longitude": -64.192514,
+            "latitude": -31.424003,
+            "longitude": -64.191226,
+            "place_id": "ChIJr5bgKIaiMpQRhHGnTOqaOCE",
             "created_at": "2020-11-15T11:00:00+00:00",
             "updated_at": "2020-11-15T11:00:00+00:00"
         }
@@ -15,8 +16,9 @@
         "pk": 2,
         "fields": {
             "created_by": 8,
-            "latitude": -31.423822,
-            "longitude": -64.190993,
+            "latitude": -31.428626,
+            "longitude": -64.184832,
+            "place_id": "ChIJkROG342iMpQRdhpVMMnP_cA",
             "created_at": "2020-11-15T11:00:01+00:00",
             "updated_at": "2020-11-15T11:00:01+00:00"
         }
@@ -26,32 +28,11 @@
         "pk": 3,
         "fields": {
             "created_by": 8,
-            "latitude": -31.425622,
-            "longitude": -64.192192,
+            "latitude": -31.442321,
+            "longitude": -64.192428,
+            "place_id": "ChIJp3rUO_aiMpQRyBvXTTJ3S9g",
             "created_at": "2020-11-15T11:00:02+00:00",
             "updated_at": "2020-11-15T11:00:02+00:00"
-        }
-    },
-    {
-        "model": "viajara.place",
-        "pk": 4,
-        "fields": {
-            "created_by": 8,
-            "latitude": -31.451004,
-            "longitude": -64.176744,
-            "created_at": "2020-11-15T11:00:03+00:00",
-            "updated_at": "2020-11-15T11:00:03+00:00"
-        }
-    },
-    {
-        "model": "viajara.place",
-        "pk": 5,
-        "fields": {
-            "created_by": 8,
-            "latitude": -31.447839,
-            "longitude": -64.186597,
-            "created_at": "2020-11-15T11:00:04+00:00",
-            "updated_at": "2020-11-15T11:00:04+00:00"
         }
     }
 ]

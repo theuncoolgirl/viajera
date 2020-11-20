@@ -21,24 +21,35 @@ const Login = () => {
     const popDemoUser = e => {
         e.preventDefault()
         login("demo-user", "demopassword123")
-        history.push('/hello/')
+        history.push('/map/')
     }
 
     return (
-        <div>
-            Login
-            <form onSubmit={loginHandler}>
-                <label>
-                    Username:
-                        <input name="username" type="text" value={username} onChange={updateUsername} />
-                </label>
-                <label>
-                    Password:
-                        <input name="password" type="password" value={password} onChange={updatePassword} />
-                </label>
-                <input type="submit" value="Submit" />
+        <div
+            style={{
+                width: 500,
+                backgroundColor: "white",
+                margin: "auto"
+            }}>
+            <form onSubmit={loginHandler} >
+                <div>
+                    <label>
+                        Username:
+                        <input name="username" type="text" value={username} onChange={updateUsername} style={{ height: 24, border: 0, width: 300, display: "block", margin: "0 auto" }} />
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        Password:
+                        <input name="password" type="password" value={password} onChange={updatePassword} style={{ height: 24, border: 0, width: 300, display: "block", margin: "0 auto" }} />
+                    </label>
+                </div>
+                <div>
+                    <input className={"listButton"} type="submit" value="Submit" style={{ width: 150, display: "block", margin: "10px auto" }} />
+                    <button className={"listButton"} onClick={popDemoUser} style={{ width: 150, display: "block", margin: "10px auto" }}>Demo User</button>
+                </div>
             </form>
-            <button onClick={popDemoUser}>Demo User</button>
+
         </div>
     )
 }

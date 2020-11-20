@@ -5,6 +5,7 @@ const SET_SELECTED_MARKER = 'viajara/map/SET_SELECTED_MARKER'
 const SET_CLICKED_LOCATION = 'viajara/map/SET_CLICKED_LOCATION'
 const SET_PLACE_DETAILS = 'viajara/map/SET_PLACE_DETAILS'
 const SET_PLACE_PHOTO = 'viajara/map/SET_PLACE_PHOTO'
+const SET_LIST_DISPLAY = 'viajara/map/SET_LIST_DISPLAY'
 
 const setPlaces = places => ({
     type: SET_PLACES,
@@ -14,10 +15,10 @@ const setPlaceDetails = details => ({
     type: SET_PLACE_DETAILS,
     details
 })
-const setPlacePhoto = photo => ({
-    type: SET_PLACE_PHOTO,
-    photo
-})
+// const setPlacePhoto = photo => ({
+//     type: SET_PLACE_PHOTO,
+//     photo
+// })
 const setSelectedMarker = selectedMarker => ({
     type: SET_SELECTED_MARKER,
     selectedMarker
@@ -26,10 +27,15 @@ const setClickedLocation = clickedLocation => ({
     type: SET_CLICKED_LOCATION,
     clickedLocation
 });
+const setListDisplay = isDisplayed => ({
+    type: SET_LIST_DISPLAY,
+    isDisplayed
+})
 
 export const actions = {
     setSelectedMarker,
-    setClickedLocation
+    setClickedLocation,
+    setListDisplay
 }
 
 const getPlaces = () => {
@@ -42,6 +48,56 @@ const getPlaces = () => {
             console.log("Error: ", JSON.stringify(error, null, 4));
             throw error;
         }
+    }
+}
+
+const createPlace = () => {
+    return async (dispatch, getState) => {
+        const { map: { clickedLocation:
+            { latitude, longitude, placeId } } } = getState();
+        console.log("lat: ", latitude, "long: ", longitude, "id: ", placeId)
+        try {
+            let response = await axiosInstance.post('/place_create/',
+                {
+                    create_by: 1,
+                    latitude: latitude.toFixed(6),
+                    longitude: longitude.toFixed(6),
+                    place_id: placeId,
+                }
+            )
+            // dispatch(setPlaces(places));
+        } catch (error) {
+            console.log("Error: ", JSON.stringify(error, null, 4));
+            throw error;
+        }
+    }
+}
+
+const createListEntry = () => {
+    return async (dispatch, getState) => {
+        const { map: { clickedLocation: { placeId } } } = getState();
+        try {
+            let response = await axiosInstance.post('/place_single/',
+                { place_id: placeId }
+            )
+            console.log("Place Single Response: ", response)
+        } catch (error) {
+            console.log("Error: ", JSON.stringify(error, null, 4));
+            throw error;
+        }
+        // try {
+        //     let response = await axiosInstance.post('/list_entry_create/',
+        //         {
+        //             place_id: 1,
+        //             list_id: 1,
+        //             notes: "Newly added place.",
+        //         }
+        //     )
+        //     // dispatch(setPlaces(places));
+        // } catch (error) {
+        //     console.log("Error: ", JSON.stringify(error, null, 4));
+        //     throw error;
+        // }
     }
 }
 
@@ -104,7 +160,8 @@ const getPlacePhoto = () => {
 export const thunks = {
     getPlaces,
     getPlaceDetails,
-    getPlacePhoto
+    getPlacePhoto,
+    createPlace
 }
 
 const initialState = {
@@ -114,6 +171,15 @@ const initialState = {
         longitude: null,
         placeId: null
     },
+    listDisplay: false,
+    places: [
+        {
+            created_by: null,
+            latitude: "-31.444628",
+            longitude: "-64.195518",
+            place_id: "ChIJiSfjfViiMpQRlLBHIpgt29A"
+        }
+    ]
 }
 
 export default function reducer(state = initialState, action) {
@@ -142,6 +208,11 @@ export default function reducer(state = initialState, action) {
             return {
                 ...state,
                 selectedMarker: action.selectedMarker
+            }
+        case SET_LIST_DISPLAY:
+            return {
+                ...state,
+                listDisplay: action.isDisplayed
             }
         default:
             return state;

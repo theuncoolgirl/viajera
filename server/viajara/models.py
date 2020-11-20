@@ -11,6 +11,7 @@ class Place(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     latitude = models.DecimalField(max_digits=9, decimal_places=6)
     longitude = models.DecimalField(max_digits=9, decimal_places=6)
+    place_id = models.CharField(max_length=100, null=False)
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
 

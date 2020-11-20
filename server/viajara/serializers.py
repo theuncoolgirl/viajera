@@ -37,8 +37,7 @@ class UserSerializer(serializers.ModelSerializer):
 class PlaceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Place
-        fields = ('id', 'created_by', 'latitude', 'longitude', 'created_at',
-                  'updated_at')
+        fields = ('created_by', 'latitude', 'longitude', 'place_id')
 
 
 class ListSerializer(serializers.ModelSerializer):
@@ -51,8 +50,7 @@ class ListSerializer(serializers.ModelSerializer):
 class ListEntrySerializer(serializers.ModelSerializer):
     class Meta:
         model = ListEntry
-        fields = ('id', 'place_id', 'list_id',
-                  'notes', 'created_at', 'updated_at')
+        fields = ('place_id', 'list_id', 'notes')
 
 
 class PhotoSerializer(serializers.ModelSerializer):

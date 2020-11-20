@@ -1,0 +1,13 @@
+[
+    {
+        "model": "viajara.list",
+        "pk": 1,
+        "fields": {
+            "user_id": 1,
+            "name": "Saved Places",
+            "description": "A collection of saved places of interest.",
+            "created_at": "2020-11-15T11:00:00+00:00",
+            "updated_at": "2020-11-15T11:00:00+00:00"
+        }
+    }
+]
