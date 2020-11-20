@@ -11,6 +11,7 @@ djangorestframework = "*"
 djangorestframework-simplejwt = "*"
 psycopg2-binary = "*"
 python-dotenv = "*"
+django-cors-headers = "*"
 
 [requires]
 python_version = "3.8"
