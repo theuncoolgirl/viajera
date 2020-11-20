@@ -14,3 +14,96 @@
     border: 1px solid white;
     padding: 1em; 
 }
+
+.navBar {
+    height: 5vh
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 18px;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+h1 {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  color: #281414;
+  z-index: 10;
+  margin: 0;
+  padding: 0;
+}
+
+.search {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  /* transform: translateX(-50%); */
+  width: 100%;
+  max-width: 400px;
+  z-index: 10;
+}
+
+.search input {
+  padding: 0.5rem;
+  /* font-size: 2rem; */
+  width: 100%;
+}
+
+.locate {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  z-index: 10;
+}
+.locate img {
+  width: 30px;
+  cursor: pointer;
+}
+
+[data-reach-combobox-popover] {
+  border: solid 1px hsla(0, 0%, 0%, 0.25);
+  background: hsla(0, 100%, 100%, 0.99);
+  font-size: 85%;
+}
+
+[data-reach-combobox-list] {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+[data-reach-combobox-option] {
+  cursor: pointer;
+  margin: 0;
+  padding: 0.25rem 0.5rem;
+}
+
+[data-reach-combobox-option][aria-selected="true"] {
+  background: hsl(211, 10%, 95%);
+}
+
+[data-reach-combobox-option]:hover {
+  background: hsl(211, 10%, 92%);
+}
+
+[data-reach-combobox-option][aria-selected="true"]:hover {
+  background: hsl(211, 10%, 90%);
+}
+
+[data-suggested-value] {
+  font-weight: bold;
+}

@@ -8,5 +8,5 @@ urlpatterns = [
     path('token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
     path('blacklist/', LogoutAndBlacklistRefreshToken.as_view(), name='blacklist'),
     path('hello/', HelloWorldView.as_view(), name='hello_world'),
-    path('place/', PlaceCreate.as_view(), name='places')
+    path('place/', PlaceCreate.as_view(), name='places'),
 ]
