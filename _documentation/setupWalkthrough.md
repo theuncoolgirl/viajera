@@ -1,4 +1,7 @@
 cors: https://stackoverflow.com/questions/44037474/cors-error-while-consuming-calling-rest-api-with-react
+google places wrapper: https://github.com/googlemaps/google-maps-services-python
+proxy cors server: https://stackoverflow.com/questions/43871637/no-access-control-allow-origin-header-is-present-on-the-requested-resource-whe/43881141#43881141
+
 
 # Django-React App Setup
 ## Backend Setup

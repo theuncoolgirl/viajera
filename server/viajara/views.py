@@ -4,8 +4,14 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status, permissions, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
+import googlemaps
+import os
 from .models import Place
 from .serializers import MyTokenObtainPairSerializer, PlaceSerializer, UserSerializer
+
+
+API_KEY = os.getenv("REACT_APP_GOOGLE_PLACES_API_KEY")
+gmaps = googlemaps.Client(key=API_KEY)
 
 
 class ObtainTokenPair(TokenObtainPairView):
@@ -19,7 +25,7 @@ class UserCreate(APIView):
     permission_classes = (permissions.AllowAny,)
     authentication_classes = ()
 
-    # this view just has a POST endpoint to create a new user
+    # create a new user
     def post(self, request, format='json'):
         serializer = UserSerializer(data=request.data)
 
@@ -28,10 +34,8 @@ class UserCreate(APIView):
             # `serializer.save()` can be used to create a User object. Could
             # be used with `update()` methods as well.
             user = serializer.save()
-
             if user:
                 json = serializer.data
-
                 return Response(json, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -57,21 +61,5 @@ class LogoutAndBlacklistRefreshToken(APIView):
 
 
 class PlaceCreate(generics.ListCreateAPIView):
-    # permission_classes = (permissions.AllowAny,)
-    # authentication_classes = ()
     queryset = Place.objects.all()
     serializer_class = PlaceSerializer
-
-    # def get(self, request):
-    # places = Place.objects.all()
-    # print(places)
-    # return Response(data={"hello": "world"}, status=status.HTTP_200_OK)
-    # places = [{
-    #     "id": place.id,
-    #     "created_by": place.created_by,
-    #     "latitude": place.latitude,
-    #     "longitude": place.longitude,
-    #     "created_at": place.created_at,
-    #     "updated_at": place.updated_at
-    # } for place in Place.objects.all()]
-    # return Response(places)
