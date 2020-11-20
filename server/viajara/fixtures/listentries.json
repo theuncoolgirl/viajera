@@ -1,0 +1,35 @@
+[
+    {
+        "model": "viajara.listentry",
+        "pk": 1,
+        "fields": {
+            "place_id": 1,
+            "list_id": 1,
+            "notes": "A really cool place!",
+            "created_at": "2020-11-15T11:00:00+00:00",
+            "updated_at": "2020-11-15T11:00:00+00:00"
+        }
+    },
+    {
+        "model": "viajara.listentry",
+        "pk": 2,
+        "fields": {
+            "place_id": 2,
+            "list_id": 1,
+            "notes": "Awesome views.",
+            "created_at": "2020-11-15T11:00:00+00:00",
+            "updated_at": "2020-11-15T11:00:00+00:00"
+        }
+    },
+    {
+        "model": "viajara.listentry",
+        "pk": 3,
+        "fields": {
+            "place_id": 3,
+            "list_id": 1,
+            "notes": "Want to visit this summer.",
+            "created_at": "2020-11-15T11:00:00+00:00",
+            "updated_at": "2020-11-15T11:00:00+00:00"
+        }
+    }
+]

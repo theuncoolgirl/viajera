@@ -1,22 +1,72 @@
 #root{ 
-    background-color:black;
+    background-color: white;
     color: white
 }
-
 .nav-link{ 
     color:white;
-    border: 1px solid white;
-    padding: 1em;
-    text-decoration: none}
+    text-decoration: none;
+    font-size: 22px;
+    margin-top: 10px;
+    margin-left: 10px;
+  }
 
 .nav-link:hover{ 
     color:white;
-    border: 1px solid white;
-    padding: 1em; 
 }
 
 .navBar {
-    height: 5vh
+    height: 35px;
+    display: flex;
+    justify-content: space-between;
+    background-color: #3a4949
+}
+
+.navButton {
+    display:inline-block;
+    padding:0.35em 1.2em;
+    margin:0 0.3em 0.3em 0;
+    border: 0;
+    border-radius:0.12em;
+    box-sizing: border-box;
+    text-decoration:none;
+    font-weight:300;
+    color:#FFFFFF;
+    text-align:center;
+    transition: all 0.2s;
+    background-color: #6a8383;
+}
+
+.navButton:hover{
+    color:#3a4949;
+    background-color:#adbebe;
+}
+
+.listButton {
+  padding:0.35em 1.2em;
+  border: 0;
+  border-radius:0.12em;
+  box-sizing: border-box;
+  text-decoration:none;
+  font-weight:300;
+  color:#FFFFFF;
+  text-align:center;
+  transition: all 0.2s;
+  background-color: #adbebe;
+}
+
+.listButton:hover{
+    color:#3a4949;
+    background-color:#ffffff;
+    border: 1px solid #adbebe;
+}
+
+.placeOptions{
+  color: #6a8383
+}
+
+.placeOptions:hover{
+  color: #6a8383;
+  text-decoration: underline;
 }
 
 body {

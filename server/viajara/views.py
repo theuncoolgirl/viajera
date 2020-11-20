@@ -60,6 +60,48 @@ class LogoutAndBlacklistRefreshToken(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-class PlaceCreate(generics.ListCreateAPIView):
-    queryset = Place.objects.all()
-    serializer_class = PlaceSerializer
+class PlaceView(APIView):
+    def get(self, request, *args, **kwargs):
+        places = Place.objects.all()
+        serializer = PlaceSerializer(places, many=True)
+        return Response(serializer.data)
+
+
+class PlaceSingleView(APIView):
+    def put(self, request, *args, **kwargs):
+        print(request.data)
+        try:
+            place = Place.objects.get(place_id=request.data.place_id)
+        except Place.DoesNotExist:  # Be explicit about exceptions
+            place = None
+        return place
+
+
+class PlaceCreate(APIView):
+    def post(self, request, *args, **kwargs):
+        serializer = PlaceSerializer(data=request.data)
+        if serializer.is_valid():
+            place = serializer.save()
+            serializer = PlaceSerializer(place)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ListEntryCreate(APIView):
+    def post(self, request, *args, **kwargs):
+        serializer = ListEntrySerializer(data=request.data)
+        if serializer.is_valid():
+            list_entry = serializer.save()
+            serializer = ListEntrySerializer(list_entry)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# class PlaceView(generics.ListCreateAPIView):
+#     queryset = Place.objects.all()
+#     serializer_class = PlaceSerializer
+
+    # def post(self, request):
+    #     serializer = PlaceSerializer(data=request.data)
+    #     if serializer.is_valid(raise_exception=True):
+    #         serializer.save()
+    #         return Response(serializer.data)
