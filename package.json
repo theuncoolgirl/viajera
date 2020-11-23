@@ -5,8 +5,12 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack --config webpack.config.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "heroku-prebuild": "NODE_ENV=production cd client/ && yarn install && yarn build && cd .."
   },
+  "cacheDirectories": [
+    "client/node_modules"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/theuncoolgirl/viajara.git"
