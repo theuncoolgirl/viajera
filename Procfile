@@ -1,1 +1,1 @@
-web: gunicorn viajera.wsgi
+web: gunicorn viajara.wsgi
