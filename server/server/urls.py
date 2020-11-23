@@ -15,9 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from .views import FrontendAppView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('viajara.urls')),
-    path('', include('frontend.urls'))
+    path('', include('frontend.urls')),
+    re_path(r'^', FrontendAppView.as_view())
 ]
