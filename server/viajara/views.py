@@ -4,14 +4,9 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status, permissions, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
-import googlemaps
 import os
 from .models import Place
 from .serializers import MyTokenObtainPairSerializer, PlaceSerializer, UserSerializer
-
-
-API_KEY = os.getenv("REACT_APP_GOOGLE_PLACES_API_KEY")
-gmaps = googlemaps.Client(key=API_KEY)
 
 
 class ObtainTokenPair(TokenObtainPairView):
