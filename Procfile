@@ -1,1 +1,1 @@
-web: gunicorn viajara.wsgi --log-file -
+web: gunicorn viajara.wsgi

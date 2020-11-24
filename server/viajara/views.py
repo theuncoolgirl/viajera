@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 import os
 from .models import Place
-from .serializers import MyTokenObtainPairSerializer, PlaceSerializer, UserSerializer
+from .serializers import MyTokenObtainPairSerializer, PlaceSerializer, UserSerializer, ListEntrySerializer
 
 
 class ObtainTokenPair(TokenObtainPairView):
