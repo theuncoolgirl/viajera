@@ -1,1 +1,1 @@
-web: gunicorn server/viajara.wsgi
+web: gunicorn viajara.wsgi
