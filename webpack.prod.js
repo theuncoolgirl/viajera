@@ -1,8 +1,8 @@
-const Dotenv = require('dotenv-webpack');
+const webpack = require('webpack');
 const path = require('path');
 
 module.exports = {
-    mode: "development",
+    mode: "production",
     entry: ['babel-polyfill', path.resolve(__dirname, 'server/frontend/src/index.js')],
     // Webpack will find the start of our React app and bundle from there
     output: {
@@ -18,8 +18,10 @@ module.exports = {
         // the same one we import in index.html
     },
     plugins: [
-        new Dotenv({
-            path: './server/server/.env',
+        new webpack.DefinePlugin({
+            'process.env': {
+                'API_KEY': JSON.stringify(process.env.API_KEY)
+            }
         })
     ],
     module: {
