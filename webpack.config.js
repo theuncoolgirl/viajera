@@ -19,7 +19,7 @@ module.exports = {
     },
     plugins: [
         new Dotenv({
-            path: './server/server/.env',
+            path: 'server/server/.env',
         })
     ],
     module: {
