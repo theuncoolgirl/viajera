@@ -17,11 +17,11 @@ module.exports = {
         filename: 'main.js',
         // the same one we import in index.html
     },
-    plugins: [
-        new Dotenv({
-            path: 'server/server/.env',
-        })
-    ],
+    // plugins: [
+    //     new Dotenv({
+    //         path: './server/server/.env',
+    //     })
+    // ],
     module: {
         // configuration regarding modules
         rules: [
