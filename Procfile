@@ -1,1 +1,1 @@
-web: gunicorn viajara.wsgi
+web: gunicorn --pythonpath server server.wsgi
