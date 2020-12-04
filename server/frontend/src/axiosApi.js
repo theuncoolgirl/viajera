@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const axiosInstance = axios.create({
-    baseURL: (process.env.NODE_ENV === 'development') ? 'http://127.0.0.1:8000/api/' : 'http://viajera.herokuapp.com/api/',
+    baseURL: process.env.REACT_APP_BASE_URL,
     timeout: 5000,
     headers: {
         'Authorization': localStorage.getItem('access_token') ? "JWT " + localStorage.getItem('access_token') : null,
