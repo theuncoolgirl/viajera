@@ -43,6 +43,7 @@ const getPlaces = () => {
         try {
             let response = await axiosInstance.get('/place/');
             const places = response.data
+            console.log("Places=", places)
             dispatch(setPlaces(places));
         } catch (error) {
             console.log("Error: ", JSON.stringify(error, null, 4));
