@@ -34,7 +34,10 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'http://viajera.herokuapp.com',
+    'localhost',
+    '127.0.0.1']
 
 
 # Application definition - add any apps you create with `startapp` here:
@@ -164,10 +167,10 @@ USE_TZ = True
 # static files
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-REACT_APP_DIR = os.path.join(BASE_DIR, 'client')
+# REACT_APP_DIR = os.path.join(BASE_DIR, 'client')
 
-STATICFILES_DIRS = [
-    os.path.join(REACT_APP_DIR, 'build', 'static'),
-]
+# STATICFILES_DIRS = [
+#     os.path.join(REACT_APP_DIR, 'build', 'static'),
+# ]

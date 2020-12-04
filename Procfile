@@ -1,2 +1,1 @@
-release: python server/manage.py migrate
-web: gunicorn viajara.wsgi --log-file -
+web: gunicorn --pythonpath server server.wsgi
