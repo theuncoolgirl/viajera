@@ -1,13 +1,5 @@
 import axios from 'axios'
 
-// const baseUrl
-
-// if (process.env.NODE_ENV === 'development') {
-//     const baseURL = 'http://127.0.0.1:8000/api/'
-// } else {
-//     const baseURL = 'http://viajera.herokuapp.com/api/'
-// }
-
 const axiosInstance = axios.create({
     baseURL: (process.env.NODE_ENV === 'development') ? 'http://127.0.0.1:8000/api/' : 'http://viajera.herokuapp.com/api/',
     timeout: 5000,
