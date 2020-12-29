@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch } from 'react-redux';
 import { useHistory } from "react-router-dom";
 import { thunks } from "../store/session";
+// import CSRFToken from "./CSRFToken";
 
 const Login = () => {
     const dispatch = useDispatch();

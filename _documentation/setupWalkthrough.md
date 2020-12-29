@@ -2,6 +2,12 @@ cors: https://stackoverflow.com/questions/44037474/cors-error-while-consuming-ca
 google places wrapper: https://github.com/googlemaps/google-maps-services-python
 proxy cors server: https://stackoverflow.com/questions/43871637/no-access-control-allow-origin-header-is-present-on-the-requested-resource-whe/43881141#43881141
 
+build and run server
+set up env (make envexample)
+npm install
+virutal env
+migrations 
+
 
 # Django-React App Setup
 ## Backend Setup

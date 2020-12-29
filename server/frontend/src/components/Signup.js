@@ -1,7 +1,6 @@
 import React, { Component, useState } from "react";
 import { useDispatch } from 'react-redux';
 import { thunks } from "../store/session";
-import axiosInstance from "../axiosApi";
 
 const Signup = () => {
     const dispatch = useDispatch();
@@ -24,6 +23,7 @@ const Signup = () => {
 
     const signupHandler = e => {
         e.preventDefault()
+        console.log("hit signup handler")
         signup(first_name, last_name, username, email, password)
     }
 

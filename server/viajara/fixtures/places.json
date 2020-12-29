@@ -3,7 +3,7 @@
         "model": "viajara.place",
         "pk": 1,
         "fields": {
-            "created_by": 8,
+            "created_by": 1,
             "latitude": -31.424003,
             "longitude": -64.191226,
             "place_id": "ChIJr5bgKIaiMpQRhHGnTOqaOCE",
@@ -15,7 +15,7 @@
         "model": "viajara.place",
         "pk": 2,
         "fields": {
-            "created_by": 8,
+            "created_by": 1,
             "latitude": -31.428626,
             "longitude": -64.184832,
             "place_id": "ChIJkROG342iMpQRdhpVMMnP_cA",
@@ -27,7 +27,7 @@
         "model": "viajara.place",
         "pk": 3,
         "fields": {
-            "created_by": 8,
+            "created_by": 1,
             "latitude": -31.442321,
             "longitude": -64.192428,
             "place_id": "ChIJp3rUO_aiMpQRyBvXTTJ3S9g",

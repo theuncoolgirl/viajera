@@ -45,7 +45,8 @@ const logout = () => {
 
 const signup = (first_name, last_name, username, email, password) => {
     return async dispatch => {
-        const response = await axiosInstance.post('user/create/',
+        console.log("hitting signup thunk");
+        const response = await axiosInstance.post('/user/create/',
             {
                 first_name: first_name,
                 last_name: last_name,
