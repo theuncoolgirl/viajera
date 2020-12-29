@@ -42,8 +42,10 @@ const getPlaces = () => {
     return async dispatch => {
         try {
             let response = await axiosInstance.get('/place/');
-            const places = response.data
-            console.log("Places=", places)
+            // const places = response.data
+            const places = response;
+            // console.log("API KEY: ");
+            // console.log("Places=", places)
             dispatch(setPlaces(places));
         } catch (error) {
             console.log("Error: ", JSON.stringify(error, null, 4));
@@ -105,7 +107,9 @@ const createListEntry = () => {
 const getPlaceDetails = () => {
     return async (dispatch, getState) => {
         const { map: { clickedLocation: { placeId } } } = getState();
+        console.log("clicked location: ", placeId);
         const proxyurl = 'https://cors-anywhere.herokuapp.com/';
+        // const proxyurl = '';
         const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=place_id,name,types,formatted_address,geometry,formatted_phone_number,business_status,opening_hours,website,rating,reviews,price_level,photos&key=${process.env.REACT_APP_GOOGLE_PLACES_API_KEY}`
         let response = await fetch(proxyurl + url)
         try {
@@ -141,6 +145,7 @@ const getPlacePhoto = () => {
         const { map: { placeDetails: { photos } } } = getState();
         const firstPhotoRef = photos[0].photo_reference;
         const proxyurl = 'https://cors-anywhere.herokuapp.com/';
+        // const proxyurl = '';
         const url = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${firstPhotoRef}&key=${process.env.REACT_APP_GOOGLE_PLACES_API_KEY}`
         let response = await fetch(proxyurl + url)
         try {

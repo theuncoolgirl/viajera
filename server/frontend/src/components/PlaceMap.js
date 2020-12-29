@@ -89,6 +89,7 @@ const PlaceMap = () => {
 
     const handleClick = (e) => {
         e.stop();
+        console.log("Hitting first")
         console.log("Event: ", e.placeId);
         setClickedLocation({
             latitude: e.latLng.lat(),
@@ -96,6 +97,7 @@ const PlaceMap = () => {
             placeId: e.placeId
         });
         if (clickedLocation.placeId) {
+            console.log ("Hitting here")
             getPlaceDetails();
             // getPlacePhoto();
             // toggleListDisplay();
@@ -111,7 +113,6 @@ const PlaceMap = () => {
 
     return (
         <div>
-
             <div style={{ display: "flex" }}>
                 {placeDetails ?
                     <div style={{ color: "black", backgroundColor: "white", width: 350, height: "95vh", borderRight: "2px solid #c3d6d6", paddingRight: 10 }}>
@@ -154,7 +155,8 @@ const PlaceMap = () => {
                         onLoad={onMapLoad}
                         onClick={handleClick}
                     >
-                        {places.map((place) => (
+                        {places ? (
+                        places.map((place) => (
                             <Marker
                                 key={place.created_at}
                                 position={{ lat: parseFloat(place.latitude), lng: parseFloat(place.longitude) }}
@@ -166,7 +168,8 @@ const PlaceMap = () => {
                                     setSelectedMarker(place);
                                 }}
                             />
-                        ))}
+                        )) ) :
+                        null}
                         {/* {selectedMarker ? (
                             <InfoWindow
                                 position={{

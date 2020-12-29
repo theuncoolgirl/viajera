@@ -1,0 +1,9 @@
+DATABASE_NAME=database_name
+DATABASE_USER=user_name
+DATABASE_PASSWORD=password
+DATABASE_HOST=localhost
+DATABASE_PORT=5432
+REACT_APP_BASE_URL=http://127.0.0.1:8000/api/
+
+REACT_APP_GOOGLE_PLACES_API_KEY=key_value_here
+SECRET_KEY=secret_key_here

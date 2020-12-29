@@ -5,7 +5,7 @@ from rest_framework import status, permissions, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 import os
-from .models import Place
+from .models import Place, User
 from .serializers import MyTokenObtainPairSerializer, PlaceSerializer, UserSerializer, ListEntrySerializer
 
 
@@ -22,6 +22,7 @@ class UserCreate(APIView):
 
     # create a new user
     def post(self, request, format='json'):
+        print("hitting create user view")
         serializer = UserSerializer(data=request.data)
 
         if serializer.is_valid():
@@ -29,6 +30,7 @@ class UserCreate(APIView):
             # `serializer.save()` can be used to create a User object. Could
             # be used with `update()` methods as well.
             user = serializer.save()
+            print("user:", user)
             if user:
                 json = serializer.data
                 return Response(json, status=status.HTTP_201_CREATED)
@@ -61,6 +63,11 @@ class PlaceView(APIView):
         serializer = PlaceSerializer(places, many=True)
         return Response(serializer.data)
 
+class UserView(APIView):
+    def get(self, request, *args, **kwargs):
+        users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data)
 
 class PlaceSingleView(APIView):
     def put(self, request, *args, **kwargs):
